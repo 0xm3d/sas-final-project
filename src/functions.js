@@ -13,24 +13,23 @@ ville: ${apprenant.ville}
   }
 }
 
-export function normaliserNom(nom) {
-  return nom.trim().toLowerCase()
-}
+// clean name with all the white spaces in start, end, and middle and make the name in lowercase
+
 
 
 // checks if days number is valid and  compares the comEx with the offeredEx
 export function validerResultat(day, completedEx, offeredEx) {
 
-if (day < 1 || day > 7) {
-  return false
-}
+  if (day < 1 || day > 7) {
+    return { valid: false, error: `Invalid day! Days should be between 1 and 7, you entered "${day}"` };
+  }
 
-if (completedEx > offeredEx) {
-    return false;
-}
-    return true
-}
+  if (completedEx > offeredEx) {
+    return { valid: false, error: `Completed exercises (${completedEx}) cannot exceed offered exercises (${offeredEx})` };
+  }
 
+  return { valid: true, confirmation: "Result is valid." };
+}
 
 
 export function ajouterApprenant(nom, ville) {
