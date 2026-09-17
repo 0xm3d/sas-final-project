@@ -1,4 +1,4 @@
-const apprenants = [
+ export const apprenants = [
     {
         id: 1,
         nomComplet: "Sara Dev",
@@ -25,4 +25,5 @@ const apprenants = [
             }
         ]
     }
-];
+]
+
