@@ -1,18 +1,5 @@
 import { apprenants } from "./data.js";
 
-export function afficherApprenant(apprenants) {
-  if (apprenants.length == 0) {
-    return `the list is empty`;
-  }
-  for (let apprenant of apprenants) {
-    console.log(`
-id:  ${apprenant.id}
-nom: ${apprenant.nomComplet}
-ville: ${apprenant.ville} 
-`);
-  }
-}
-
 // clean name with all the white spaces in start, end, and middle and make the name in lowercase
 export function normaliserNom(name) {
   let cleanName = name.trim();
@@ -20,7 +7,6 @@ export function normaliserNom(name) {
   cleanName = cleanName.toLowerCase();
   return cleanName;
 }
-
 
 
 // checks if days number is valid and  compares the comEx with the offeredEx
@@ -38,16 +24,30 @@ export function validerResultat(day, completedEx, offeredEx) {
 }
 
 
-export function ajouterApprenant(nom, ville) {
+// add new learner but just name and city
+export function ajouterApprenant(name, city) {
+  if (name.trim() === "") {
+    return { success: false, error: "Name is empty" }
+  }
+
+  if (city.trim() === "") {
+    return { success: false, error: "City is empty" }
+  }
+
   let apprenant = {
     id: apprenants.length + 1,
-    nom: normaliserNom(nom),
-    ville: ville,
-  };
-  return apprenants.push(apprenant);
+    nomComplet: normaliserNom(name),
+    ville: city,
+    resultats: []
+  }
+
+  apprenants.push(apprenant)
+
+  return { success: true, learner: apprenant }
 }
 
-export function enregistrerResultat() {}
+
+
 
 export function rechercherApprenant() {}
 
