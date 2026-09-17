@@ -14,6 +14,12 @@ ville: ${apprenant.ville}
 }
 
 // clean name with all the white spaces in start, end, and middle and make the name in lowercase
+export function normaliserNom(name) {
+  let cleanName = name.trim();
+  cleanName = cleanName.replace(/\s+/g, " ");
+  cleanName = cleanName.toLowerCase();
+  return cleanName;
+}
 
 
 
