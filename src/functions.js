@@ -47,6 +47,58 @@ export function ajouterApprenant(name, city) {
 }
 
 
+export function enregistrerResultat(id, day, completedEx, offeredEx, challengeDone) {
+  let apprenant = null // holding matching learner if found other ways stay null
+
+  //go through every learner in the araay and check if his id matches the given one and if yes save it to the apprenant
+  for(let i = 0; i < apprenants.length; i++) {
+    if(apprenants[i].id === id) {
+      apprenant = apprenants[i]
+    }
+  }
+
+  //if my loop didn't find a match apprenant will stay null and return that id doesn't exist
+  if (apprenant === null) {
+    return {success: false, error: "no learner with the given id exists"}
+  }
+
+  //check if my given info are valid
+  let resultcheck = validerResultat(day, completedEx, offeredEx)
+
+  //if not valid  return the error from the previous func
+  if (!resultcheck.valid) {
+    return { success: false, error: resultcheck.error }
+  }
+
+  // track if we found an existing result for this day or not
+  let found = false
+
+  // go through the existing results of the learner
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+  
+  // check if the given day matches a day that already exists and update the info
+  if (apprenant.resultats[i].jour === day) {
+    apprenant.resultats[i].exercicesTermines = completedEx
+    apprenant.resultats[i].totalExercices = offeredEx
+    apprenant.resultats[i].challengeTermine = challengeDone
+    found = true
+  }
+}
+//if the given day is new push the info to the resultes of the student
+  if (!found) {
+    apprenant.resultats.push({
+      jour: day,
+      exercicesTermines: completedEx,
+      totalExercices: offeredEx,
+      challengeTermine: challengeDone
+    })
+  }
+
+  return { success: true, message: `Day ${day} recorded for ${apprenant.nomComplet}` }
+}
+
+
+
 
 
 export function rechercherApprenant() {}
