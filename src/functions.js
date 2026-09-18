@@ -46,7 +46,7 @@ export function ajouterApprenant(name, city) {
   return { success: true, learner: apprenant }
 }
 
-
+//save the result
 export function enregistrerResultat(id, day, completedEx, offeredEx, challengeDone) {
   let apprenant = null // holding matching learner if found other ways stay null
 
@@ -94,49 +94,9 @@ export function enregistrerResultat(id, day, completedEx, offeredEx, challengeDo
     })
   }
 
-  return { success: true, message: `Day ${day} recorded for ${apprenant.nomComplet}` }
+  return { success: true, message: `Day ${day} recorded for ${apprenant.nomComplet}, ${apprenant.challengeTermine} challenge done` }
 }
 
-
-
-
-
-export function rechercherApprenant() {}
-
-export function calculerProgression(apprenant) {
-  let totalComp = 0;
-  let totalProp = 0;
-  let challengeCom = 0;
-  let daycount = 0;
-  for (let i = 0; i < apprenant.resultats.length; i++) {
-    totalComp += apprenant.resultats[i].exercicesTermines;
-    totalProp += apprenant.resultats[i].totalExercices;
-    if (apprenant.resultats[i].challengeTermine == true) 
-      challengeCom += 1;
-    daycount += 1;
-  }
-  let prog = (totalComp / totalProp) * 100;
-
-  let level = "";
-  if (prog >= 80) level = "Solide";
-  else if (prog >= 50 && prog < 80) level = "En progression";
-  else level = "À renforcer";
-
-  return `
-    The total of exercices is : ${totalProp}
-    The total of completed exercices is : ${totalComp}
-    The total of completed challenges is : ${challengeCom}
-    total of days is : ${daycount}
-    The progress of the student is : ${prog}%
-    The level of the student is: ${level}
-    `;
-}
-
-export function filtrerParNiveau() {}
-
-export function trierParProgression() {}
-
-export function afficherTableauDeBord() {}
 
 
 export function filtrerParAlphabet(apprenants) {
@@ -146,3 +106,4 @@ export function filtrerParAlphabet(apprenants) {
   }
   return list.sort()
 }
+
