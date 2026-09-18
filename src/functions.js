@@ -164,6 +164,18 @@ export function calculerProgression(apprenant) {
 }
 
 
+//filter the learners depending on their levels 
+export function filtrerParNiveau(level) {
+  let result = [] // to sort the learners that matches the given level
+  for (let i = 0; i < apprenants.length; i++) {
+    if (calculerProgression(apprenants[i]).level === level) {
+      result.push(apprenants[i])
+    }
+  }
+  return result
+}
+
+
 
 
 export function filtrerParAlphabet(apprenants) {
