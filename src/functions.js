@@ -192,7 +192,7 @@ export function trierParProgression() {
   return apprenants
 }
 
-
+// sort my learners using alphabetical order 
 export function filtrerParAlphabet(apprenants) {
   const list = []
   for (let i = 0; i < apprenants.length; i++) {
@@ -202,6 +202,35 @@ export function filtrerParAlphabet(apprenants) {
 }
 
 
+//display the given learner info
+export function afficherApprenant(apprenant) {
+
+  console.log(`ID: ${apprenant.id}`);
+  console.log(`Name: ${apprenant.nomComplet}`);
+  console.log(`City: ${apprenant.ville}`);
+
+  console.log("Results:");
+
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+
+    let resultat = apprenant.resultats[i];
+
+    console.log(
+      `Day ${resultat.jour}: ${resultat.exercicesTermines}/${resultat.totalExercices} exercises - Challenge: ${
+        resultat.challengeTermine ? "Yes" : "No"
+      }`
+    );
+
+  }
+
+}
+
+export function displayAllLearners(apprenants) {
+  apprenants.forEach((apprenant) => {
+    afficherApprenant(apprenant);
+    console.log("======================");
+  });
+}
 
 
 //dashboard 
