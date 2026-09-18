@@ -116,6 +116,7 @@ export function rechercherApprenant(id, name) {
     }
     return { success: false, error: `No learner found with name "${name}"` }
   }
+  return { success: false, error: "You must provide an id or a name to search." }
 }
 
 //calculate prog for learners
