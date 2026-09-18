@@ -98,6 +98,28 @@ export function enregistrerResultat(id, day, completedEx, offeredEx, challengeDo
 }
 
 
+//search for a student using id or name 
+export function rechercherApprenant(id, name) {
+  if (id !== undefined) {
+    for(let i = 0; i < apprenants.length; i++) {
+      if (apprenants[i].id === id) {
+        return { success: true, apprenant: apprenants[i] }
+      }
+    }
+    return { success: false, error: `No learner found with id "${id}"` }
+  }
+
+  if (name !== undefined) {
+    for(let i = 0; i < apprenants.length; i++) {
+      if (normaliserNom(apprenants[i].nomComplet).includes(normaliserNom(name))) {
+        return { success: true, apprenant: apprenants[i] }
+      }
+    }
+    return { success: false, error: `No learner found with name "${name}"` }
+  }
+}
+
+
 
 export function filtrerParAlphabet(apprenants) {
   const list = []
