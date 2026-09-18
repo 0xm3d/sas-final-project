@@ -119,6 +119,51 @@ export function rechercherApprenant(id, name) {
   }
 }
 
+//calculate prog for learners
+export function calculerProgression(apprenant) {
+  let totalComp = 0
+  let totalProp = 0
+  let challengeCom = 0
+  let daycount = 0
+
+  //loop through my given learner and take his data to store it in my new vars to do calculations later on
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+    totalComp += apprenant.resultats[i].exercicesTermines
+    totalProp += apprenant.resultats[i].totalExercices
+    if (apprenant.resultats[i].challengeTermine == true)
+      challengeCom += 1
+    daycount += 1
+  }
+
+  if (totalProp === 0) {
+    return {
+      totalComp: 0,
+      totalProp: 0,
+      challengeCom: 0,
+      daycount: 0,
+      prog: 0,
+      level: "No results yet"
+    }
+  }
+
+  let prog = (totalComp / totalProp) * 100
+
+  let level = ""
+  if (prog >= 80) level = "Solide"
+  else if (prog >= 50 && prog < 80) level = "En progression"
+  else level = "À renforcer"
+
+  return {
+    totalComp: totalComp,
+    totalProp: totalProp,
+    challengeCom: challengeCom,
+    daycount: daycount,
+    prog: prog,
+    level: level
+  }
+}
+
+
 
 
 export function filtrerParAlphabet(apprenants) {
@@ -129,3 +174,10 @@ export function filtrerParAlphabet(apprenants) {
   return list.sort()
 }
 
+
+
+
+//dashboard 
+export function afficherTableauDeBord() {
+  
+}
