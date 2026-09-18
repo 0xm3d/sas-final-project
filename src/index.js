@@ -91,28 +91,59 @@ do {
         }
 
         case 7: {
-            let niveau = prompt(
-                "Level (Solide / En progression / À renforcer): "
-            )
+    console.log(
+        `Choose a level:
+1. Solid
+2. In progress
+3. Needs reinforcement
+0. Return to main menu`
+    )
 
-            console.log(filtrerParNiveau(niveau));
+    let choiceTwo = Number(prompt("What is your choice? "));
+    let level
+
+    switch (choiceTwo) {
+        case 1:
+            level = "Solide"
             break
-        }
+        case 2:
+            level = "En progression"
+            break
+        case 3:
+            level = "À renforcer"
+            break
+        case 0:
+            break
+        default:
+            console.log("Invalid choice")
+            break
+    }
 
-        case 8:
-            console.log(trierParProgression());
-            break;
+    if (choiceTwo === 0) {
+        break
+    }
 
+    if (level) {
+        console.log(filtrerParNiveau(level))
+    }
+
+    break
+}
+
+        case 8: 
+        console.log(trierParProgression());
+        break;
+    
         case 9:
-            console.log(filtrerParAlphabet(apprenants));
-            break;
+        console.log(filtrerParAlphabet(apprenants));
+        break;
 
         case 0:
-            console.log("Goodbye!");
-            break
+        console.log("Goodbye!");
+        break
 
         default:
-            console.log("Invalid choice. Please choose a number between 0 and 9.");
+        console.log("Invalid choice. Please choose a number between 0 and 9.");
     }
 
 } while (choice !== 0)
