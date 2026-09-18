@@ -175,7 +175,22 @@ export function filtrerParNiveau(level) {
   return result
 }
 
+//sort my learners depending on their prog
+export function trierParProgression() {
+  for (let i = 0; i < apprenants.length; i++) {
+    for (let j = 0; j < apprenants.length - 1; j++) {
+      let progA = calculerProgression(apprenants[j]).prog
+      let progB = calculerProgression(apprenants[j + 1]).prog
 
+      if (progA < progB) {
+        let temp = apprenants[j]
+        apprenants[j] = apprenants[j + 1]
+        apprenants[j + 1] = temp
+      }
+    }
+  }
+  return apprenants
+}
 
 
 export function filtrerParAlphabet(apprenants) {
@@ -193,3 +208,4 @@ export function filtrerParAlphabet(apprenants) {
 export function afficherTableauDeBord() {
   
 }
+
