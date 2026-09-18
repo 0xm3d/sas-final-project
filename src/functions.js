@@ -93,8 +93,7 @@ export function enregistrerResultat(id, day, completedEx, offeredEx, challengeDo
       challengeTermine: challengeDone
     })
   }
-
-  return { success: true, message: `Day ${day} recorded for ${apprenant.nomComplet}, ${apprenant.challengeTermine} challenge done` }
+  return { success: true, message: `Day ${day} recorded for ${apprenant.nomComplet}, challenge ${challengeDone ? "completed" : "not completed"}` }
 }
 
 
@@ -163,13 +162,14 @@ export function calculerProgression(apprenant) {
   }
 }
 
+             
 
 //filter the learners depending on their levels 
 export function filtrerParNiveau(level) {
-  let result = [] // to sort the learners that matches the given level
+  let result = []// to sort the learners that matches the given level
   for (let i = 0; i < apprenants.length; i++) {
     if (calculerProgression(apprenants[i]).level === level) {
-      result.push(apprenants[i])
+      result.push(apprenants[i].nomComplet)
     }
   }
   return result
