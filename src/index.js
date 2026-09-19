@@ -1,17 +1,17 @@
-import { apprenants } from "./data.js";
+import { learners } from "./data.js";
 
 import {
-    afficherApprenant,
-    normaliserNom,
-    validerResultat,
-    ajouterApprenant,
-    enregistrerResultat,
-    rechercherApprenant,
-    calculerProgression,
-    filtrerParNiveau,
-    trierParProgression,
-    afficherTableauDeBord,
-    filtrerParAlphabet,
+    displayLearner,
+    normalizeName,
+    validateResult,
+    addLearner,
+    saveResult,
+    searchLearner,
+    calculateProgression,
+    filterByLevel,
+    sortByProgression,
+    displayDashboard,
+    sortAlphabetically,
     displayAllLearners
 } from "./functions.js"
 
@@ -25,16 +25,16 @@ do {
     console.log("\n" + "=".repeat(40));
     console.log("SAS PROGRESS CONSOLE");
     console.log("=".repeat(40));
-    console.log("1. Afficher le tableau de bord");
-    console.log("2. Afficher la liste des apprenants");
-    console.log("3. Ajouter un apprenant");
-    console.log("4. Consulter un apprenant par identifiant");
-    console.log("5. Ajouter ou modifier le résultat d'une journée");
-    console.log("6. Rechercher un apprenant par nom");
-    console.log("7. Filtrer les apprenants par niveau");
-    console.log("8. Trier les apprenants par progression décroissante");
-    console.log("9. Trier les apprenants par ordre alphabétique");
-    console.log("0. Quitter");
+    console.log("1. Show the dashboard");
+    console.log("2. Show the list of learners");
+    console.log("3. Add a learner");
+    console.log("4. Look up a learner by ID");
+    console.log("5. Add or update a day's result");
+    console.log("6. Search for a learner by name");
+    console.log("7. Filter learners by level");
+    console.log("8. Sort learners by descending progression");
+    console.log("9. Sort learners alphabetically");
+    console.log("0. Quit");
     console.log("=".repeat(40));
 
     choice = Number(prompt("What is your choice? "));
@@ -43,57 +43,57 @@ do {
     switch (choice) {
 
         case 1:
-            afficherTableauDeBord();
+            displayDashboard();
             break;
 
         case 2:
-            displayAllLearners(apprenants);
+            displayAllLearners(learners);
             break;
 
         case 3: {
-            let nom = prompt("Student's name: ");
-            let ville = prompt("Student's city: ");
+            let name = prompt("Student's name: ");
+            let city = prompt("Student's city: ");
 
-            ajouterApprenant(nom, ville);
+            addLearner(name, city);
             break;
         }
 
         case 4: {
             let id = Number(prompt("Student's ID: "));
 
-            let result = rechercherApprenant(id);
+            let result = searchLearner(id);
             if (result.success) {
-                afficherApprenant(result.apprenant);
+                displayLearner(result.learner);
             }
             break;
         }
 
         case 5: {
             let id = Number(prompt("Student's ID: "));
-            let jour = Number(prompt("Day (1-7): "));
-            let exercicesTermines = Number(prompt("Completed exercises: "));
-            let totalExercices = Number(prompt("Total exercises: "));
-            let challengeTermine = prompt("Challenge completed? (yes/no): ");
+            let day = Number(prompt("Day (1-7): "));
+            let completedExercises = Number(prompt("Completed exercises: "));
+            let totalExercises = Number(prompt("Total exercises: "));
+            let challengeCompleted = prompt("Challenge completed? (yes/no): ");
 
-            challengeTermine = challengeTermine.toLowerCase() === "yes";
+            challengeCompleted = challengeCompleted.toLowerCase() === "yes";
 
-            enregistrerResultat(
+            saveResult(
                 id,
-                jour,
-                exercicesTermines,
-                totalExercices,
-                challengeTermine
+                day,
+                completedExercises,
+                totalExercises,
+                challengeCompleted
             );
 
             break
         }
 
         case 6: {
-            let nom = prompt("Student's name: ");
+            let name = prompt("Student's name: ");
 
-            let result = rechercherApprenant(undefined, nom);
+            let result = searchLearner(undefined, name);
             if (result.success) {
-                displayAllLearners(result.apprenants);
+                displayAllLearners(result.learners);
             }
             break;
         }
@@ -114,13 +114,13 @@ do {
 
     switch (choiceTwo) {
         case 1:
-            level = "Solide"
+            level = "Solid"
             break
         case 2:
-            level = "En progression"
+            level = "In progress"
             break
         case 3:
-            level = "À renforcer"
+            level = "Needs reinforcement"
             break
         case 0:
             break
@@ -134,18 +134,18 @@ do {
     }
 
     if (level) {
-        console.log(filtrerParNiveau(level).join(", "))
+        console.log(filterByLevel(level).join(", "))
     }
 
     break
 }
 
         case 8: 
-        displayAllLearners(trierParProgression());
+        displayAllLearners(sortByProgression());
         break;
     
         case 9:
-        console.log(filtrerParAlphabet(apprenants).join(", "));
+        console.log(sortAlphabetically(learners).join(", "));
         break;
 
         case 0:
