@@ -13,13 +13,16 @@ export function normaliserNom(name) {
 export function validerResultat(day, completedEx, offeredEx) {
 
   if (day < 1 || day > 7) {
+    console.log(`Invalid day! Days should be between 1 and 7, you entered "${day}"`);
     return { valid: false, error: `Invalid day! Days should be between 1 and 7, you entered "${day}"` };
   }
 
   if (completedEx > offeredEx) {
+    console.log(`Completed exercises (${completedEx}) cannot exceed offered exercises (${offeredEx})`);
     return { valid: false, error: `Completed exercises (${completedEx}) cannot exceed offered exercises (${offeredEx})` };
   }
 
+  console.log("Result is valid.");
   return { valid: true, confirmation: "Result is valid." };
 }
 
@@ -27,15 +30,23 @@ export function validerResultat(day, completedEx, offeredEx) {
 // add new learner but just name and city
 export function ajouterApprenant(name, city) {
   if (name.trim() === "") {
+    console.log("Name is empty");
     return { success: false, error: "Name is empty" }
   }
 
   if (city.trim() === "") {
+    console.log("City is empty");
     return { success: false, error: "City is empty" }
   }
 
+  //find the highest existing id and add 1, so ids stay unique even if a learner is ever removed
+  let maxId = 0
+  for (let i = 0; i < apprenants.length; i++) {
+    if (apprenants[i].id > maxId) maxId = apprenants[i].id
+  }
+
   let apprenant = {
-    id: apprenants.length + 1,
+    id: maxId + 1,
     nomComplet: normaliserNom(name),
     ville: city,
     resultats: []
@@ -43,6 +54,7 @@ export function ajouterApprenant(name, city) {
 
   apprenants.push(apprenant)
 
+  console.log(`Learner added: ${apprenant.nomComplet} (${apprenant.ville}), id ${apprenant.id}`);
   return { success: true, learner: apprenant }
 }
 
@@ -59,6 +71,7 @@ export function enregistrerResultat(id, day, completedEx, offeredEx, challengeDo
 
   //if my loop didn't find a match apprenant will stay null and return that id doesn't exist
   if (apprenant === null) {
+    console.log("No learner with the given id exists");
     return {success: false, error: "no learner with the given id exists"}
   }
 
@@ -93,6 +106,7 @@ export function enregistrerResultat(id, day, completedEx, offeredEx, challengeDo
       challengeTermine: challengeDone
     })
   }
+  console.log(`Day ${day} recorded for ${apprenant.nomComplet}, challenge ${challengeDone ? "completed" : "not completed"}`);
   return { success: true, message: `Day ${day} recorded for ${apprenant.nomComplet}, challenge ${challengeDone ? "completed" : "not completed"}` }
 }
 
@@ -105,20 +119,24 @@ export function rechercherApprenant(id, name) {
         return { success: true, apprenant: apprenants[i] }
       }
     }
+    console.log(`No learner found with id "${id}"`);
     return { success: false, error: `No learner found with id "${id}"` }
   }
 
   if (name !== undefined) {
+    let matches = [] // to store all the matches of the given name
     for(let i = 0; i < apprenants.length; i++) {
       if (normaliserNom(apprenants[i].nomComplet).includes(normaliserNom(name))) {
-        return { success: true, apprenant: apprenants[i] }
+        matches.push(apprenants[i]);
       }
     }
-    return { success: false, error: `No learner found with name "${name}"` }
+    if (matches.length === 0) {
+    console.log(`No learner found with name "${name}"`);
+    return { success: false, error: `No learner found with name "${name}"` };
   }
-  return { success: false, error: "You must provide an id or a name to search." }
+  return { success: true, apprenants: matches }
 }
-
+}
 //calculate prog for learners
 export function calculerProgression(apprenant) {
   let totalComp = 0
@@ -199,13 +217,20 @@ export function filtrerParAlphabet(apprenants) {
   for (let i = 0; i < apprenants.length; i++) {
     list.push(apprenants[i].nomComplet)
   }
-  return list.sort()
+  return list.sort((a, b) => {
+    let nameA = a.toLowerCase()
+    let nameB = b.toLowerCase()
+    if (nameA < nameB) return -1
+    if (nameA > nameB) return 1
+    return 0
+  })
 }
 
 
 //display the given learner info
 export function afficherApprenant(apprenant) {
 
+  console.log("-".repeat(40));
   console.log(`ID: ${apprenant.id}`);
   console.log(`Name: ${apprenant.nomComplet}`);
   console.log(`City: ${apprenant.ville}`);
@@ -224,18 +249,72 @@ export function afficherApprenant(apprenant) {
 
   }
 
+  console.log("-".repeat(40));
+
 }
 
 export function displayAllLearners(apprenants) {
   apprenants.forEach((apprenant) => {
     afficherApprenant(apprenant);
-    console.log("======================");
   });
 }
 
 
 //dashboard 
 export function afficherTableauDeBord() {
-  
-}
+  if (apprenants.length === 0) {
+    console.log("No learners yet");
+    return;
+  }
 
+  let totalProg = 0
+
+  //add up everyone's progression to get the average later
+  for (let i = 0; i < apprenants.length; i++) {
+    totalProg += calculerProgression(apprenants[i]).prog
+  }
+
+  let avgProg = totalProg / apprenants.length
+
+  console.log("\n=================== DASHBOARD ===================\n")
+  console.log(`Total learners          : ${apprenants.length}`)
+  console.log(`Average progression      : ${Math.floor(avgProg)}%\n`)
+
+  console.log("Breakdown by level:")
+  console.log(`  - Solid              : ${filtrerParNiveau("Solide").length}`)
+  console.log(`  - In progress          : ${filtrerParNiveau("En progression").length}`)
+  console.log(`  - Needs improvement    : ${filtrerParNiveau("À renforcer").length}\n`)
+
+  console.log("--------------------- RANKING ---------------------")
+  console.log("(sorted by descending progression)\n")
+
+  //reuse the sorting function we already wrote so the ranking is in the right order
+  let ranked = trierParProgression()
+
+  for (let i = 0; i < ranked.length; i++) {
+    let apprenant = ranked[i]
+    let stats = calculerProgression(apprenant)
+
+    let missingDays = []
+    let incompleteChallenges = []
+
+    //go through days 1 to 7 and note what's missing or not completed
+    for (let day = 1; day <= 7; day++) {
+      let found = null
+      for (let j = 0; j < apprenant.resultats.length; j++) {
+        if (apprenant.resultats[j].jour === day) found = apprenant.resultats[j]
+      }
+
+      if (found === null) {
+        missingDays.push(day)
+      } else if (found.challengeTermine === false) {
+        incompleteChallenges.push(`Day ${day}`)
+      }
+    }
+
+    console.log(`${i + 1}. ${apprenant.nomComplet.padEnd(15)} — ${stats.prog.toFixed(0)}%  [${stats.level}]`)
+    console.log(`   Exercises: ${stats.totalComp} / ${stats.totalProp}   |  Challenges: ${stats.challengeCom}  |  Days recorded: ${stats.daycount}/7`)
+    console.log(`   Missing days           : ${missingDays.length > 0 ? missingDays.join(", ") : "None"}`)
+    console.log(`   Incomplete challenges  : ${incompleteChallenges.length > 0 ? incompleteChallenges.join(", ") : "None"}\n`)
+  }
+}
