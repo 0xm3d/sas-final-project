@@ -22,7 +22,9 @@ const prompt = promptSync();
 let choice;
 
 do {
-    console.log("\nSAS PROGRESS CONSOLE");
+    console.log("\n" + "=".repeat(40));
+    console.log("SAS PROGRESS CONSOLE");
+    console.log("=".repeat(40));
     console.log("1. Afficher le tableau de bord");
     console.log("2. Afficher la liste des apprenants");
     console.log("3. Ajouter un apprenant");
@@ -33,8 +35,10 @@ do {
     console.log("8. Trier les apprenants par progression décroissante");
     console.log("9. Trier les apprenants par ordre alphabétique");
     console.log("0. Quitter");
+    console.log("=".repeat(40));
 
     choice = Number(prompt("What is your choice? "));
+    console.log("=".repeat(40));
 
     switch (choice) {
 
@@ -50,14 +54,17 @@ do {
             let nom = prompt("Student's name: ");
             let ville = prompt("Student's city: ");
 
-            console.log(ajouterApprenant(nom, ville));
+            ajouterApprenant(nom, ville);
             break;
         }
 
         case 4: {
             let id = Number(prompt("Student's ID: "));
 
-            console.log(rechercherApprenant(id));
+            let result = rechercherApprenant(id);
+            if (result.success) {
+                afficherApprenant(result.apprenant);
+            }
             break;
         }
 
@@ -70,15 +77,13 @@ do {
 
             challengeTermine = challengeTermine.toLowerCase() === "yes";
 
-            console.log(
-                enregistrerResultat(
-                    id,
-                    jour,
-                    exercicesTermines,
-                    totalExercices,
-                    challengeTermine
-                )
-            )
+            enregistrerResultat(
+                id,
+                jour,
+                exercicesTermines,
+                totalExercices,
+                challengeTermine
+            );
 
             break
         }
@@ -86,11 +91,15 @@ do {
         case 6: {
             let nom = prompt("Student's name: ");
 
-            console.log(rechercherApprenant(undefined, nom));
+            let result = rechercherApprenant(undefined, nom);
+            if (result.success) {
+                displayAllLearners(result.apprenants);
+            }
             break;
         }
 
         case 7: {
+    console.log("-".repeat(40));
     console.log(
         `Choose a level:
 1. Solid
@@ -98,6 +107,7 @@ do {
 3. Needs reinforcement
 0. Return to main menu`
     )
+    console.log("-".repeat(40));
 
     let choiceTwo = Number(prompt("What is your choice? "));
     let level
@@ -124,18 +134,18 @@ do {
     }
 
     if (level) {
-        console.log(filtrerParNiveau(level))
+        console.log(filtrerParNiveau(level).join(", "))
     }
 
     break
 }
 
         case 8: 
-        console.log(trierParProgression());
+        displayAllLearners(trierParProgression());
         break;
     
         case 9:
-        console.log(filtrerParAlphabet(apprenants));
+        console.log(filtrerParAlphabet(apprenants).join(", "));
         break;
 
         case 0:
@@ -145,5 +155,7 @@ do {
         default:
         console.log("Invalid choice. Please choose a number between 0 and 9.");
     }
+
+    console.log("=".repeat(40));
 
 } while (choice !== 0)
