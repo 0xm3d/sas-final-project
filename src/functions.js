@@ -29,14 +29,14 @@ export function validateResult(day, completedEx, offeredEx) {
 
 // add new learner but just name and city
 export function addLearner(name, city) {
-  if (name.trim() === "") {
+  if (name.trim() === "" || name.typeof != "string") {
     console.log("Name is empty");
-    return { success: false, error: "Name is empty" }
+    return { success: false, error: "Error: Name is invalid or empty" }
   }
 
   if (city.trim() === "") {
     console.log("City is empty");
-    return { success: false, error: "City is empty" }
+    return { success: false, error: "Error: City is invalid or empty" || city.typeof != "string" }
   }
 
   //find the highest existing id and add 1, so ids stay unique even if a learner is ever removed
