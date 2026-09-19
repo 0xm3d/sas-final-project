@@ -29,7 +29,7 @@ export function validateResult(day, completedEx, offeredEx) {
 
 // add new learner but just name and city
 export function addLearner(name, city) {
-  if (name.trim() === "" || name.typeof != "string") {
+  if (name.trim() === "") {
     console.log("Name is empty");
     return { success: false, error: "Error: Name is invalid or empty" }
   }
@@ -91,7 +91,11 @@ export function saveResult(id, day, completedEx, offeredEx, challengeDone) {
   
   // check if the given day matches a day that already exists and update the info
   if (learner.results[i].day === day) {
-    learner.results[i].completedExercises = completedEx
+    if (completedEx > learner.results[i].completedExercises)
+    {
+      learner.results[i].completedExercises = completedEx
+    }
+    
     learner.results[i].totalExercises = offeredEx
     learner.results[i].challengeCompleted = challengeDone
     found = true
